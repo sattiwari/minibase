@@ -1,4 +1,5 @@
 package java.minibase;
 
-public class DbFile {
+interface DbFile {
+
 }
