@@ -9,6 +9,8 @@ The BufferPool is also responsible for locking;  when a transaction fetches a pa
 has the appropriate locks to read/write the page.
  */
 
+import java.io.IOException;
+
 public class BufferPool {
 
     /*
@@ -54,5 +56,9 @@ public class BufferPool {
         // some code goes here
         return null;
     }
+
+    public synchronized void flushAllPages() throws IOException {
+    }
+
 
 }

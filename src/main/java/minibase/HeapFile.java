@@ -49,6 +49,20 @@ public class HeapFile implements DbFile {
         return 0;
     }
 
+    public ArrayList<Page> insertTuple(TransactionId tid, Tuple t)
+            throws DbException, IOException, TransactionAbortedException {
+        // some code goes here
+        return null;
+        // not necessary for lab1
+    }
+
+    public Page deleteTuple(TransactionId tid, Tuple t) throws DbException,
+            TransactionAbortedException {
+        // some code goes here
+        return null;
+        // not necessary for lab1
+    }
+
     public DbFileIterator iterator(TransactionId tid) {
         return null;
     }
