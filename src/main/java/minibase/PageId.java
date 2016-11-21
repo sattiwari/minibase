@@ -1,4 +1,4 @@
-package java.minibase;
+package minibase;
 
 /** PageId is an interface to a specific page of a specific table. */
 public interface PageId {

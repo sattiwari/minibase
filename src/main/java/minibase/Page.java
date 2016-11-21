@@ -1,4 +1,4 @@
-package java.minibase;
+package minibase;
 
 /**
  * Page is the interface used to represent pages that are resident in the

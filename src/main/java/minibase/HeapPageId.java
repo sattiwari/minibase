@@ -1,4 +1,4 @@
-package java.minibase;
+package minibase;
 
 /** Unique identifier for HeapPage objects. */
 public class HeapPageId implements PageId {

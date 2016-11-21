@@ -1,4 +1,4 @@
-package java.minibase;
+package minibase;
 
 /*
 BufferPool manages the reading and writing of pages into memory from disk.

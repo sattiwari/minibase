@@ -1,4 +1,4 @@
-package java.minibase;
+package minibase;
 
 public class Permissions {
 }

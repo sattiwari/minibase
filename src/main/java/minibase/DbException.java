@@ -1,4 +1,4 @@
-package java.minibase;
+package minibase;
 
 /** Generic database exception class */
 public class DbException extends Exception {

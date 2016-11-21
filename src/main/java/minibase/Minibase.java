@@ -1,4 +1,4 @@
-package java.minibase;
+package minibase;
 
 
 import java.io.File;

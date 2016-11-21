@@ -1,4 +1,4 @@
-package java.minibase;
+package minibase;
 
 /*
 Interface for values of fields in tuples in SimpleDB.

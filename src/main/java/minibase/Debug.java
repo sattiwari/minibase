@@ -1,4 +1,4 @@
-package java.minibase;
+package minibase;
 
 /**
  * Debug is a utility class that wraps println statements and allows
