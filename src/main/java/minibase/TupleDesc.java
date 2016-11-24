@@ -33,6 +33,30 @@ public class TupleDesc {
         this(typeArr, new String[typeArr.length]);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        TupleDesc other = (TupleDesc) obj;
+        if (tdItems == null) {
+            if (other.tdItems != null)
+                return false;
+        } else {
+            int nItems = tdItems.size();
+            if (other.tdItems.size() != nItems)
+                return false;
+            for (int i = 0; i < nItems; i++) {
+                if (tdItems.get(i).fieldType != other.tdItems.get(i).fieldType)
+                    return false;
+            }
+        }
+        return true;
+    }
+
 
 
 }
