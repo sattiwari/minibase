@@ -9,14 +9,14 @@ public class Catalog {
 
     private final List<DbFile> files;
     private final List<String> tableNames;
-    private final List<String> primaryKeyFields;
+//    private final List<String> primaryKeyFields;
     private final Map<String, Integer> nameToIdMap;
     private final Map<Integer, Integer> idToIndexMap;
 
     public Catalog() {
         this.files = new ArrayList<DbFile>();
         this.tableNames = new ArrayList<String>();
-        this.primaryKeyFields = new ArrayList<String>();
+//        this.primaryKeyFields = new ArrayList<String>();
         this.nameToIdMap = new HashMap<String, Integer>();
         this.idToIndexMap = new HashMap<Integer, Integer>();
     }
@@ -27,7 +27,7 @@ public class Catalog {
         idToIndexMap.put(id, new Integer(files.size()));
         this.files.add(file);
         this.tableNames.add(tableName);
-        this.primaryKeyFields.add(pkField);
+//        this.primaryKeyFields.add(pkField);
     }
 
     public void addTable(DbFile file, String name) {
@@ -57,6 +57,10 @@ public class Catalog {
 
     public TupleDesc getTupleDesc(int tableId) throws NoSuchElementException {
         return files.get(idToIndexMap.get(new Integer(tableId))).getTupleDesc();
+    }
+
+    public DbFile getDatabaseFile(int tableId) throws NoSuchElementException {
+        return files.get(getIndex(tableId));
     }
 
 
