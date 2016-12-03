@@ -49,52 +49,52 @@ public class Utility {
      * @return a Tuple with a single IntField with value n and with
      *         RecordId(HeapPageId(1,2), 3)
      */
-//    public static Tuple getHeapTuple(int n) {
-//        Tuple tup = new Tuple(getTupleDesc(1));
-//        tup.setRecordId(new RecordId(new HeapPageId(1, 2), 3));
-//        tup.setField(0, new IntField(n));
-//        return tup;
-//    }
-//
-//    /**
-//     * @return a Tuple with an IntField for every element of tupdata and
-//     *         RecordId(HeapPageId(1, 2), 3)
-//     */
-//    public static Tuple getHeapTuple(int[] tupdata) {
-//        Tuple tup = new Tuple(getTupleDesc(tupdata.length));
-//        tup.setRecordId(new RecordId(new HeapPageId(1, 2), 3));
-//        for (int i = 0; i < tupdata.length; ++i)
-//            tup.setField(i, new IntField(tupdata[i]));
-//        return tup;
-//    }
-//
-//    /**
-//     * @return a Tuple with a 'width' IntFields each with value n and with
-//     *         RecordId(HeapPageId(1, 2), 3)
-//     */
-//    public static Tuple getHeapTuple(int n, int width) {
-//        Tuple tup = new Tuple(getTupleDesc(width));
-//        tup.setRecordId(new RecordId(new HeapPageId(1, 2), 3));
-//        for (int i = 0; i < width; ++i)
-//            tup.setField(i, new IntField(n));
-//        return tup;
-//    }
+    public static Tuple getHeapTuple(int n) {
+        Tuple tup = new Tuple(getTupleDesc(1));
+        tup.setRecordId(new RecordId(new HeapPageId(1, 2), 3));
+        tup.setField(0, new IntField(n));
+        return tup;
+    }
+
+    /**
+     * @return a Tuple with an IntField for every element of tupdata and
+     *         RecordId(HeapPageId(1, 2), 3)
+     */
+    public static Tuple getHeapTuple(int[] tupdata) {
+        Tuple tup = new Tuple(getTupleDesc(tupdata.length));
+        tup.setRecordId(new RecordId(new HeapPageId(1, 2), 3));
+        for (int i = 0; i < tupdata.length; ++i)
+            tup.setField(i, new IntField(tupdata[i]));
+        return tup;
+    }
+
+    /**
+     * @return a Tuple with a 'width' IntFields each with value n and with
+     *         RecordId(HeapPageId(1, 2), 3)
+     */
+    public static Tuple getHeapTuple(int n, int width) {
+        Tuple tup = new Tuple(getTupleDesc(width));
+        tup.setRecordId(new RecordId(new HeapPageId(1, 2), 3));
+        for (int i = 0; i < width; ++i)
+            tup.setField(i, new IntField(n));
+        return tup;
+    }
 
     /**
      * @return a Tuple with a 'width' IntFields with the value tupledata[i] in
      *         each field. do not set it's RecordId, hence do not distinguish
      *         which sort of file it belongs to.
      */
-//    public static Tuple getTuple(int[] tupledata, int width) {
-//        if (tupledata.length != width) {
-//            System.out.println("get Hash Tuple has the wrong length~");
-//            System.exit(1);
-//        }
-//        Tuple tup = new Tuple(getTupleDesc(width));
-//        for (int i = 0; i < width; ++i)
-//            tup.setField(i, new IntField(tupledata[i]));
-//        return tup;
-//    }
+    public static Tuple getTuple(int[] tupledata, int width) {
+        if (tupledata.length != width) {
+            System.out.println("get Hash Tuple has the wrong length~");
+            System.exit(1);
+        }
+        Tuple tup = new Tuple(getTupleDesc(width));
+        for (int i = 0; i < width; ++i)
+            tup.setField(i, new IntField(tupledata[i]));
+        return tup;
+    }
 
     /**
      * A utility method to create a new HeapFile with a single empty page,
@@ -102,27 +102,27 @@ public class Utility {
      * be overwritten. The new table will be added to the Catalog with the
      * specified number of columns as IntFields.
      */
-//    public static HeapFile createEmptyHeapFile(String path, int cols) throws IOException {
-//        File f = new File(path);
-//        // touch the file
-//        FileOutputStream fos = new FileOutputStream(f);
-//        fos.write(new byte[0]);
-//        fos.close();
-//
-//        HeapFile hf = openHeapFile(cols, f);
-//        HeapPageId pid = new HeapPageId(hf.getId(), 0);
-//
-//        HeapPage page = null;
-//        try {
-//            page = new HeapPage(pid, HeapPage.createEmptyPageData());
-//        } catch (IOException e) {
-//            // this should never happen for an empty page; bail;
-//            throw new RuntimeException("failed to create empty page in HeapFile");
-//        }
-//
-//        hf.writePage(page);
-//        return hf;
-//    }
+    public static HeapFile createEmptyHeapFile(String path, int cols) throws IOException {
+        File f = new File(path);
+        // touch the file
+        FileOutputStream fos = new FileOutputStream(f);
+        fos.write(new byte[0]);
+        fos.close();
+
+        HeapFile hf = openHeapFile(cols, f);
+        HeapPageId pid = new HeapPageId(hf.getId(), 0);
+
+        HeapPage page = null;
+        try {
+            page = new HeapPage(pid, HeapPage.createEmptyPageData());
+        } catch (IOException e) {
+            // this should never happen for an empty page; bail;
+            throw new RuntimeException("failed to create empty page in HeapFile");
+        }
+
+        hf.writePage(page);
+        return hf;
+    }
 
     /**
      * Opens a HeapFile and adds it to the catalog.

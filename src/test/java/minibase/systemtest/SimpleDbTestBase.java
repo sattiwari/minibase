@@ -10,7 +10,7 @@ import minibase.Database;
  * @author nizam
  *
  */
-public class MinibaseTestBase {
+public class SimpleDbTestBase {
     /**
      * Reset the database before each test is run.
      */
