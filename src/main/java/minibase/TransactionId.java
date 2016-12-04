@@ -13,6 +13,8 @@ public class TransactionId implements Serializable {
     static AtomicLong counter = new AtomicLong(0);
     final long myid;
 
+    public final static TransactionId NULL_TRANSACTION_ID = new TransactionId();
+
     public TransactionId() {
         myid = counter.getAndIncrement();
     }
@@ -22,6 +24,9 @@ public class TransactionId implements Serializable {
     }
 
     public boolean equals(Object tid) {
+        if (tid == null) {
+            return false;
+        }
         return ((TransactionId) tid).myid == myid;
     }
 
