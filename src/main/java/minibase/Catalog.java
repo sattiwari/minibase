@@ -129,30 +129,30 @@ public class Catalog {
         return files;
     }
 
-//    public Iterator<Integer> tableIdIterator() {
-//        return new Iterator<Integer>() {
-//
-//            private int index = 0;
-//
+    public Iterator<Integer> tableIdIterator() {
+        return new Iterator<Integer>() {
+
+            private int index = 0;
+
 //            @Override
-//            public boolean hasNext() {
-//                return index < getFiles().size();
-//            }
-//
+            public boolean hasNext() {
+                return index < getFiles().size();
+            }
+
 //            @Override
-//            public Integer next() {
-//                Integer id = new Integer(getFiles().get(index).getId());
-//                index += 1;
-//                return id;
-//            }
-//
+            public Integer next() {
+                Integer id = new Integer(getFiles().get(index).getId());
+                index += 1;
+                return id;
+            }
+
 //            @Override
-//            public void remove() {
-//                throw new UnsupportedOperationException();
-//            }
-//
-//        };
-//    }
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+
+        };
+    }
 
     public String getTableName(int tableId) {
         return tableNames.get(getIndex(tableId));

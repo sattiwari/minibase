@@ -14,8 +14,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * closely with HeapPage. The format of HeapPages is described in the HeapPage
  * constructor.
  *
- * @see minibase.HeapPage#HeapPage
- * @author Sam Madden
  */
 public class HeapFile implements DbFile {
 
@@ -114,8 +112,7 @@ public class HeapFile implements DbFile {
     private HeapPage attemptTupleInsert(TransactionId tid, Tuple t, int pageNumber)
             throws DbException, TransactionAbortedException {
         PageId pageId = new HeapPageId(getId(), pageNumber);
-        HeapPage heapPage = (HeapPage) Database.getBufferPool().getPage(tid, pageId,
-                Permissions.READ_ONLY);
+        HeapPage heapPage = (HeapPage) Database.getBufferPool().getPage(tid, pageId, Permissions.READ_ONLY);
         int numberOfEmptySlots = heapPage.getNumEmptySlots();
         if (numberOfEmptySlots > 0) {
             heapPage = (HeapPage) Database.getBufferPool().getPage(tid, pageId, Permissions.READ_WRITE);

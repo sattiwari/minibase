@@ -22,9 +22,6 @@ public class HeapFileReadTest extends SimpleDbTestBase {
     private TransactionId tid;
     private TupleDesc td;
 
-    /**
-     * Set up initial resources for each unit test.
-     */
     @Override
     @Before
     public void setUp() throws Exception {
@@ -38,9 +35,6 @@ public class HeapFileReadTest extends SimpleDbTestBase {
         Database.getBufferPool().transactionComplete(tid);
     }
 
-    /**
-     * Unit test for HeapFile.getId()
-     */
     @Test
     public void getId() throws Exception {
         int id = hf.getId();
@@ -53,33 +47,22 @@ public class HeapFileReadTest extends SimpleDbTestBase {
         assertTrue(id != other.getId());
     }
 
-    /**
-     * Unit test for HeapFile.getTupleDesc()
-     */
     @Test
     public void getTupleDesc() throws Exception {
         assertEquals(td, hf.getTupleDesc());
     }
 
-    /**
-     * Unit test for HeapFile.numPages()
-     */
     @Test
     public void numPages() throws Exception {
         assertEquals(1, hf.numPages());
         // assertEquals(1, empty.numPages());
     }
 
-    /**
-     * Unit test for HeapFile.readPage()
-     */
     @Test
     public void readPage() throws Exception {
         HeapPageId pid = new HeapPageId(hf.getId(), 0);
         HeapPage page = (HeapPage) hf.readPage(pid);
 
-        // NOTE(ghuo): we try not to dig too deeply into the Page API here; we
-        // rely on HeapPageTest for that. perform some basic checks.
         assertEquals(484, page.getNumEmptySlots());
         assertTrue(page.isSlotUsed(1));
         assertFalse(page.isSlotUsed(20));
@@ -127,12 +110,5 @@ public class HeapFileReadTest extends SimpleDbTestBase {
         }
         // close twice is harmless
         it.close();
-    }
-
-    /**
-     * JUnit suite target
-     */
-    public static junit.framework.Test suite() {
-        return new JUnit4TestAdapter(HeapFileReadTest.class);
     }
 }

@@ -1,11 +1,11 @@
 package minibase;
 
-import static org.junit.Assert.assertEquals;
 import junit.framework.JUnit4TestAdapter;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class HeapFileWriteTest extends TestUtil.CreateHeapFile {
     private TransactionId tid;
@@ -13,23 +13,19 @@ public class HeapFileWriteTest extends TestUtil.CreateHeapFile {
     /**
      * Set up initial resources for each unit test.
      */
-    @Override
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         super.setUp();
-//        tid = new TransactionId();
+        tid = new TransactionId();
     }
 
-    @After
-    public void tearDown() throws Exception {
-//        Database.getBufferPool().transactionComplete(tid);
+    @After public void tearDown() throws Exception {
+        Database.getBufferPool().transactionComplete(tid);
     }
 
     /**
      * Unit test for HeapFile.addTuple()
      */
-    @Test
-    public void addTuple() throws Exception {
+    @Test public void addTuple() throws Exception {
         // we should be able to add 504 tuples on an empty page.
         for (int i = 0; i < 504; ++i) {
             empty.insertTuple(tid, Utility.getHeapTuple(i, 2));

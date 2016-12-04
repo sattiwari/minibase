@@ -181,14 +181,14 @@ public class BufferPool {
      * @param tableId the table to add the tuple to
      * @param t the tuple to add
      */
-//    public void insertTuple(TransactionId tid, int tableId, Tuple t) throws DbException, IOException,
-//            TransactionAbortedException {
-//        HeapFile heapFile = (HeapFile) Database.getCatalog().getDatabaseFile(tableId);
-//        List<Page> dirtiedPages = heapFile.insertTuple(tid, t);
-//        for (Page dirtiedPage : dirtiedPages) {
-//            dirtiedPage.markDirty(true, tid);
-//        }
-//    }
+    public void insertTuple(TransactionId tid, int tableId, Tuple t) throws DbException, IOException,
+            TransactionAbortedException {
+        HeapFile heapFile = (HeapFile) Database.getCatalog().getDatabaseFile(tableId);
+        List<Page> dirtiedPages = heapFile.insertTuple(tid, t);
+        for (Page dirtiedPage : dirtiedPages) {
+            dirtiedPage.markDirty(true, tid);
+        }
+    }
 
     /**
      * Remove the specified tuple from the buffer pool. Will acquire a write lock
@@ -203,37 +203,37 @@ public class BufferPool {
      * @param tid the transaction deleting the tuple.
      * @param t the tuple to delete
      */
-//    public void deleteTuple(TransactionId tid, Tuple t) throws DbException,
-//            TransactionAbortedException {
-//        HeapFile heapFile = (HeapFile) Database.getCatalog().getDatabaseFile(
-//                t.getRecordId().getPageId().getTableId());
-//        Page dirtiedPage = heapFile.deleteTuple(tid, t);
-//        dirtiedPage.markDirty(true, tid);
-//    }
+    public void deleteTuple(TransactionId tid, Tuple t) throws DbException,
+            TransactionAbortedException {
+        HeapFile heapFile = (HeapFile) Database.getCatalog().getDatabaseFile(
+                t.getRecordId().getPageId().getTableId());
+        Page dirtiedPage = heapFile.deleteTuple(tid, t);
+        dirtiedPage.markDirty(true, tid);
+    }
 
     /**
      * Flush all dirty pages to disk. NB: Be careful using this routine -- it
      * writes dirty data to disk so will break minibase if running in NO STEAL
      * mode.
      */
-//    public synchronized void flushAllPages() throws IOException {
-//        for (PageId pageId : pageIdToPages.keySet()) {
-//            flushPage(pageId);
-//        }
-//    }
+    public synchronized void flushAllPages() throws IOException {
+        for (PageId pageId : pageIdToPages.keySet()) {
+            flushPage(pageId);
+        }
+    }
 //
 //    /**
 //     * Remove the specific page id from the buffer pool. Needed by the recovery
 //     * manager to ensure that the buffer pool doesn't keep a rolled back page in
 //     * its cache.
 //     */
-//    public synchronized void discardPage(PageId pageId) {
-//        if (pageIdToPages.containsKey(pageId)) {
-//            pageIdToPages.remove(pageId);
-//            currentPages.decrementAndGet();
-//        }
-//    }
-//
+    public synchronized void discardPage(PageId pageId) {
+        if (pageIdToPages.containsKey(pageId)) {
+            pageIdToPages.remove(pageId);
+            currentPages.decrementAndGet();
+        }
+    }
+
 //    private void addDirtiedFlushedPage(TransactionId dirtier, PageId pageId) {
 //        if (transactionsToDirtiedFlushedPages.containsKey(dirtier)) {
 //            transactionsToDirtiedFlushedPages.get(dirtier).add(pageId);
@@ -249,33 +249,26 @@ public class BufferPool {
 //     *
 //     * @param pageId an ID indicating the page to flush
 //     */
-//    private synchronized void flushPage(PageId pageId) throws IOException {
-//        if (pageIdToPages.containsKey(pageId)) {
-//            Page page = pageIdToPages.get(pageId);
-//            // append an update record to the log, with
-//            // a before-image and after-image.
-//            TransactionId dirtier = page.isDirty();
-//            if (dirtier != null) {
-//                addDirtiedFlushedPage(dirtier, pageId);
-//                Database.getLogFile().logWrite(dirtier, page.getBeforeImage(), page);
-//                Database.getLogFile().force();
-//                Database.getCatalog().getDatabaseFile(pageId.getTableId()).writePage(page);
-//                page.markDirty(false, null);
-//            }
-//        }
-//    }
+    private synchronized  void flushPage(PageId pid) throws IOException {
+        Page page = pageIdToPages.get(pid);
+        if (page.isDirty() != null) {
+            DbFile dbFile = Database.getCatalog().getDatabaseFile(page.getId().getTableId());
+            dbFile.writePage(page);
+            page.markDirty(false, null);
+        }
+    }
 
     /**
      * Write all pages of the specified transaction to disk.
      */
-//    public synchronized void flushPages(TransactionId tid) throws IOException {
-//        for (PageId pageId : pageIdToPages.keySet()) {
-//            Page page = pageIdToPages.get(pageId);
-//            if (page.isDirty() == tid) {
-//                flushPage(pageId);
-//            }
-//        }
-//    }
+    public synchronized void flushPages(TransactionId tid) throws IOException {
+        for (PageId pageId : pageIdToPages.keySet()) {
+            Page page = pageIdToPages.get(pageId);
+            if (page.isDirty() == tid) {
+                flushPage(pageId);
+            }
+        }
+    }
 //
     private boolean isDirty(PageId pageId) {
         return pageIdToPages.get(pageId).isDirty() != null;
