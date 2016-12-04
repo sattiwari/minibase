@@ -119,7 +119,7 @@ public class HeapFile implements DbFile {
             heapPage.insertTuple(t);
             return heapPage;
         }
-//        Database.getBufferPool().releasePage(tid, pageId);
+        Database.getBufferPool().releasePage(tid, pageId);
         return null;
     }
 

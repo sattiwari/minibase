@@ -4,3 +4,4 @@ out
 target/
 lib/
 log
+*.db
