@@ -17,12 +17,12 @@ public class HeapFileWriteTest extends TestUtil.CreateHeapFile {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        tid = new TransactionId();
+//        tid = new TransactionId();
     }
 
     @After
     public void tearDown() throws Exception {
-        Database.getBufferPool().transactionComplete(tid);
+//        Database.getBufferPool().transactionComplete(tid);
     }
 
     /**

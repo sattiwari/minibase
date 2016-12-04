@@ -34,7 +34,7 @@ public class BufferPool {
     private final int maxPages;
     private final AtomicInteger currentPages;
 
-//    private final Map<PageId, Page> pageIdToPages;
+    private final Map<PageId, Page> pageIdToPages;
 //    private final Map<TransactionId, Set<PageId>> transactionsToDirtiedFlushedPages;
 //
 //    private final LockManager lockManager;
@@ -46,7 +46,7 @@ public class BufferPool {
      */
     public BufferPool(int numPages) {
         this.maxPages = numPages;
-//        this.pageIdToPages = new HashMap<PageId, Page>();
+        this.pageIdToPages = new HashMap<PageId, Page>();
 //        this.transactionsToDirtiedFlushedPages = new HashMap<TransactionId, Set<PageId>>();
 //        this.lockManager = LockManager.create();
         currentPages = new AtomicInteger(0);
@@ -72,22 +72,36 @@ public class BufferPool {
      * @throws DbException
      * @throws TransactionAbortedException
      */
-    public Page getPage(TransactionId tid, PageId pid, Permissions perm) throws DbException,
-            TransactionAbortedException {
-//        lockManager.acquireLock(tid, pid, perm);
+//    public Page getPage(TransactionId tid, PageId pid, Permissions perm) throws DbException,
+//            TransactionAbortedException {
+////        lockManager.acquireLock(tid, pid, perm);
 //        if (pageIdToPages.containsKey(pid)) {
 //            return pageIdToPages.get(pid);
 //        }
 //        if (currentPages.get() == maxPages) {
 //            evictPage();
 //        }
-        int tableId = pid.getTableId();
-        Catalog catalog = Database.getCatalog();
-        DbFile dbFile = catalog.getDatabaseFile(tableId);
-        Page page = dbFile.readPage(pid);
+//        int tableId = pid.getTableId();
+//        Catalog catalog = Database.getCatalog();
+//        DbFile dbFile = catalog.getDatabaseFile(tableId);
+//        Page page = dbFile.readPage(pid);
 //        pageIdToPages.put(pid, page);
-//        currentPages.incrementAndGet();
-        return page;
+////        currentPages.incrementAndGet();
+//        return page;
+//    }
+
+    public Page getPage(TransactionId tid, PageId pid, Permissions perm)
+            throws TransactionAbortedException, DbException {
+        if (pageIdToPages.containsKey(pid)) {
+            return pageIdToPages.get(pid);
+        } else {
+            Page page = Database.getCatalog().getDatabaseFile(pid.getTableId()).readPage(pid);
+            if (pageIdToPages.size() == maxPages) {
+                throw new minibase.DbException("BufferPool has too many pages.");
+            }
+            pageIdToPages.put(pid, page);
+            return page;
+        }
     }
 
 //    /**
@@ -263,34 +277,34 @@ public class BufferPool {
 //        }
 //    }
 //
-//    private boolean isDirty(PageId pageId) {
-//        return pageIdToPages.get(pageId).isDirty() != null;
-//    }
+    private boolean isDirty(PageId pageId) {
+        return pageIdToPages.get(pageId).isDirty() != null;
+    }
 //
 //    /**
 //     * Discards a page from the buffer pool. Flushes the page to disk to ensure
 //     * dirty pages are updated on disk.
 //     */
-//    private synchronized void evictPage() throws DbException {
-//        Iterator<PageId> pageIdIterator = pageIdToPages.keySet().iterator();
-//        PageId pageId = null;
-//        while (pageIdIterator.hasNext()) {
-//            pageId = pageIdIterator.next();
-//            if (!isDirty(pageId)) {
-//                break;
-//            }
-//        }
-//        if (pageId == null || isDirty(pageId)) {
-//            throw new DbException("All pages in BufferPool are dirty and therefore none can be evicted.");
-//        }
+    private synchronized void evictPage() throws DbException {
+        Iterator<PageId> pageIdIterator = pageIdToPages.keySet().iterator();
+        PageId pageId = null;
+        while (pageIdIterator.hasNext()) {
+            pageId = pageIdIterator.next();
+            if (!isDirty(pageId)) {
+                break;
+            }
+        }
+        if (pageId == null || isDirty(pageId)) {
+            throw new DbException("All pages in BufferPool are dirty and therefore none can be evicted.");
+        }
 //        try {
 //            flushPage(pageId);
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //            throw new DbException("IOException while flushing page during eviction.");
 //        }
-//        pageIdToPages.remove(pageId);
-//        currentPages.decrementAndGet();
-//    }
+        pageIdToPages.remove(pageId);
+        currentPages.decrementAndGet();
+    }
 
 }
