@@ -90,14 +90,13 @@ public class BufferPool {
 //        return page;
 //    }
 
-    public Page getPage(TransactionId tid, PageId pid, Permissions perm)
-            throws TransactionAbortedException, DbException {
+    public Page getPage(TransactionId tid, PageId pid, Permissions perm) throws TransactionAbortedException, DbException {
         if (pageIdToPages.containsKey(pid)) {
             return pageIdToPages.get(pid);
         } else {
             Page page = Database.getCatalog().getDatabaseFile(pid.getTableId()).readPage(pid);
             if (pageIdToPages.size() == maxPages) {
-                throw new minibase.DbException("BufferPool has too many pages.");
+                evictPage();
             }
             pageIdToPages.put(pid, page);
             return page;
@@ -290,12 +289,12 @@ public class BufferPool {
         if (pageId == null || isDirty(pageId)) {
             throw new DbException("All pages in BufferPool are dirty and therefore none can be evicted.");
         }
-//        try {
-//            flushPage(pageId);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            throw new DbException("IOException while flushing page during eviction.");
-//        }
+        try {
+            flushPage(pageId);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new DbException("IOException while flushing page during eviction.");
+        }
         pageIdToPages.remove(pageId);
         currentPages.decrementAndGet();
     }
